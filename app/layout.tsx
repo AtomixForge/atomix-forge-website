@@ -19,7 +19,7 @@ const inter_tight = Inter_Tight({
 });
 
 export const metadata: Metadata = {
-  title: "Atomix Forge - Custom Web Applications Built Right",
+  title: "Atomix Forge - Custom Applications Built Right",
   description:
     "Los Angeles-founded, globally remote software development company specializing in custom web applications built with the right technology stack for your needs.",
 };
