@@ -1,27 +1,74 @@
-export const metadata = {
-  title: "Contact us - Creative",
-  description: "Page description",
-};
+"use client";
 
+import { useState } from "react";
 import PageHeader from "@/components/page-header";
 
 export default function Contact() {
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitStatus, setSubmitStatus] = useState<
+    "idle" | "success" | "error"
+  >("idle");
+  const [errorMessage, setErrorMessage] = useState("");
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    setIsSubmitting(true);
+    setSubmitStatus("idle");
+    setErrorMessage("");
+
+    const formData = new FormData(e.currentTarget);
+    const data = {
+      name: formData.get("name") as string,
+      email: formData.get("email") as string,
+      company: formData.get("company") as string,
+      projectType: formData.get("projectType") as string,
+      timeline: formData.get("timeline") as string,
+      budget: formData.get("budget") as string,
+      techStack: formData.get("techStack") as string,
+      message: formData.get("message") as string,
+      goals: formData.get("goals") as string,
+    };
+
+    try {
+      const response = await fetch("/api/contact", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data),
+      });
+
+      if (response.ok) {
+        setSubmitStatus("success");
+        (e.target as HTMLFormElement).reset();
+      } else {
+        const errorData = await response.json();
+        setSubmitStatus("error");
+        setErrorMessage(errorData.error || "Failed to send message");
+      }
+    } catch {
+      setSubmitStatus("error");
+      setErrorMessage("Network error. Please try again.");
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
   return (
     <section>
       <div className="pt-32 pb-12 md:pt-44 md:pb-20">
         <div className="px-4 sm:px-6">
           <PageHeader
             className="mb-12 md:mb-20"
-            title="Get in touch"
-            description="Fill out the form below to set up a call, or keep reading to get in touch with us for customer support, partnerships, or media enquiries."
+            title="Let's Build Something Great"
+            description="Tell us about your project and we'll help you choose the perfect technology solution for your needs."
           >
             Contact us
           </PageHeader>
 
           {/* Contact form */}
           <div className="relative mb-16 flex items-center justify-center gap-10 pb-3 before:h-px before:w-full before:border-b before:shadow-xs before:shadow-white/20 before:[border-image:linear-gradient(to_right,transparent,--theme(--color-indigo-300/.8),transparent)1] after:h-px after:w-full after:border-b after:shadow-xs after:shadow-white/20 after:[border-image:linear-gradient(to_right,transparent,--theme(--color-indigo-300/.8),transparent)1] dark:before:shadow-none dark:before:[border-image:linear-gradient(to_right,transparent,--theme(--color-indigo-300/.16),transparent)1] dark:after:shadow-none dark:after:[border-image:linear-gradient(to_right,transparent,--theme(--color-indigo-300/.16),transparent)1]">
-            <div className="mx-auto w-full max-w-xs shrink-0">
-              <form className="relative">
+            <div className="mx-auto w-full max-w-lg shrink-0">
+              <form className="relative" onSubmit={handleSubmit}>
                 {/* Border with dots in corners */}
                 <div
                   className="absolute -inset-3 -z-10 rounded-lg bg-indigo-500/15 before:absolute before:inset-y-0 before:left-0 before:w-[15px] before:[background-image:radial-gradient(circle_at_center,--theme(--color-indigo-500/.56)_1.5px,transparent_1.5px),radial-gradient(circle_at_center,--theme(--color-indigo-500/.56)_1.5px,transparent_1.5px)] before:bg-[length:15px_15px] before:[background-position:top_center,bottom_center] before:bg-no-repeat after:absolute after:inset-y-0 after:right-0 after:w-[15px] after:[background-image:radial-gradient(circle_at_center,--theme(--color-indigo-500/.56)_1.5px,transparent_1.5px),radial-gradient(circle_at_center,--theme(--color-indigo-500/.56)_1.5px,transparent_1.5px)] after:bg-[length:15px_15px] after:[background-position:top_center,bottom_center] after:bg-no-repeat dark:bg-transparent dark:bg-linear-to-b dark:from-gray-700/80 dark:to-gray-700/70 dark:before:[background-image:radial-gradient(circle_at_center,var(--color-gray-600)_1.5px,transparent_1.5px),radial-gradient(circle_at_center,var(--color-gray-600)_1.5px,transparent_1.5px)] dark:after:[background-image:radial-gradient(circle_at_center,var(--color-gray-600)_1.5px,transparent_1.5px),radial-gradient(circle_at_center,var(--color-gray-600)_1.5px,transparent_1.5px)]"
@@ -29,9 +76,10 @@ export default function Contact() {
                 />
                 <div className="space-y-5">
                   <div className="space-y-3">
+                    {/* Name */}
                     <div>
                       <label className="sr-only" htmlFor="name">
-                        Name
+                        Full Name
                       </label>
                       <div className="relative">
                         <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-4 text-gray-500/70 dark:text-gray-400/70">
@@ -41,18 +89,21 @@ export default function Contact() {
                             width={16}
                             height={16}
                           >
-                            <path d="M14.9 0c-.3 0-8.4.8-11.6 4-2.8 2.8-2.2 6.5-1.2 8.5L.3 14.3c-.4.4-.4 1 0 1.4.2.2.4.3.7.3.3 0 .5-.1.7-.3l1.8-1.8c.9.4 2.2.8 3.6.8 1.6 0 3.3-.5 4.9-2 3.4-3.4 4-11.3 4-11.6 0-.3-.1-.6-.3-.8-.2-.2-.5-.3-.8-.3Zm-4.3 11.3c-1.9 1.9-4.2 1.5-5.5 1.1L9.4 8c.4-.4.4-1 0-1.4-.4-.4-1-.4-1.4 0L3.6 11c-.4-1.4-.8-3.7 1.1-5.6 1.9-1.9 6.5-2.9 9.2-3.3-.3 2.3-1.1 7-3.3 9.2Z" />
+                            <path d="M8 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6ZM8 10c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4Z" />
                           </svg>
                         </div>
                         <input
                           id="name"
+                          name="name"
                           className="form-input w-full pr-4 pl-10 text-sm"
                           type="text"
-                          placeholder="Your name..."
+                          placeholder="Full name"
                           required
                         />
                       </div>
                     </div>
+
+                    {/* Email */}
                     <div>
                       <label className="sr-only" htmlFor="email">
                         Email
@@ -70,16 +121,19 @@ export default function Contact() {
                         </div>
                         <input
                           id="email"
+                          name="email"
                           className="form-input w-full pr-4 pl-10 text-sm"
                           type="email"
-                          placeholder="Your email..."
+                          placeholder="Email address"
                           required
                         />
                       </div>
                     </div>
+
+                    {/* Company (Optional) */}
                     <div>
                       <label className="sr-only" htmlFor="company">
-                        Company size
+                        Company/Organization
                       </label>
                       <div className="relative">
                         <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-4 text-gray-500/70 dark:text-gray-400/70">
@@ -92,127 +146,196 @@ export default function Contact() {
                             <path d="m5.2.02 10 2A1 1 0 0 1 16 3v12a1 1 0 0 1-1 1H1a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h3V1A1 1 0 0 1 5.2.02ZM2 12v2h4v-2H2Zm0-4v2h4V8H2Zm6 6h6V3.82l-8-1.6V6h1a1 1 0 0 1 1 1v7Zm2-8h2v6h-2V6Z" />
                           </svg>
                         </div>
-                        <select
+                        <input
                           id="company"
+                          name="company"
+                          className="form-input w-full pr-4 pl-10 text-sm"
+                          type="text"
+                          placeholder="Company/Organization (optional)"
+                        />
+                      </div>
+                    </div>
+
+                    {/* Project Type */}
+                    <div>
+                      <label className="sr-only" htmlFor="projectType">
+                        Project Type
+                      </label>
+                      <div className="relative">
+                        <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-4 text-gray-500/70 dark:text-gray-400/70">
+                          <svg
+                            className="fill-current"
+                            xmlns="http://www.w3.org/2000/svg"
+                            width={16}
+                            height={16}
+                          >
+                            <path d="M2 3h12a1 1 0 0 1 1 1v8a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1zm0 2v6h12V5H2zm2 1h8v1H4V6zm0 2h6v1H4V8z" />
+                          </svg>
+                        </div>
+                        <select
+                          id="projectType"
+                          name="projectType"
                           className="form-select w-full pl-10 text-sm"
-                          defaultValue={0}
+                          defaultValue=""
                           required
                         >
-                          <option value="0" disabled hidden>
-                            Company size
+                          <option value="" disabled>
+                            Project Type
                           </option>
-                          <option value="1">1 to 5 members</option>
-                          <option value="2">5 to 20 members</option>
-                          <option value="3">More than 20 members</option>
+                          <option value="new-build">New Build</option>
+                          <option value="redesign">Redesign</option>
+                          <option value="maintenance">Maintenance</option>
+                          <option value="consultation">Consultation</option>
                         </select>
                       </div>
                     </div>
+
+                    {/* Timeline */}
+                    <div>
+                      <label className="sr-only" htmlFor="timeline">
+                        Timeline
+                      </label>
+                      <div className="relative">
+                        <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-4 text-gray-500/70 dark:text-gray-400/70">
+                          <svg
+                            className="fill-current"
+                            xmlns="http://www.w3.org/2000/svg"
+                            width={16}
+                            height={16}
+                          >
+                            <path d="M8 16A8 8 0 1 1 8 0a8 8 0 0 1 0 16ZM8 2a6 6 0 1 0 0 12A6 6 0 0 0 8 2Zm1 6V4a1 1 0 1 0-2 0v4a1 1 0 0 0 .293.707l2 2a1 1 0 0 0 1.414-1.414L9 8Z" />
+                          </svg>
+                        </div>
+                        <select
+                          id="timeline"
+                          name="timeline"
+                          className="form-select w-full pl-10 text-sm"
+                          defaultValue=""
+                          required
+                        >
+                          <option value="" disabled>
+                            Timeline
+                          </option>
+                          <option value="asap">ASAP</option>
+                          <option value="1-3-months">1-3 months</option>
+                          <option value="3-6-months">3-6 months</option>
+                          <option value="6-plus-months">6+ months</option>
+                        </select>
+                      </div>
+                    </div>
+
+                    {/* Budget Range */}
+                    <div>
+                      <label className="sr-only" htmlFor="budget">
+                        Budget Range
+                      </label>
+                      <div className="relative">
+                        <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-4 text-gray-500/70 dark:text-gray-400/70">
+                          <svg
+                            className="fill-current"
+                            xmlns="http://www.w3.org/2000/svg"
+                            width={16}
+                            height={16}
+                          >
+                            <path d="M8 0a8 8 0 1 1 0 16A8 8 0 0 1 8 0ZM6.5 4.5v7h3v-7h-3ZM8 2a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3Z" />
+                          </svg>
+                        </div>
+                        <select
+                          id="budget"
+                          name="budget"
+                          className="form-select w-full pl-10 text-sm"
+                          defaultValue=""
+                          required
+                        >
+                          <option value="" disabled>
+                            Budget Range
+                          </option>
+                          <option value="under-10k">Under $10k</option>
+                          <option value="10k-25k">$10k - $25k</option>
+                          <option value="25k-50k">$25k - $50k</option>
+                          <option value="50k-100k">$50k - $100k</option>
+                          <option value="100k-plus">$100k+</option>
+                          <option value="lets-discuss">
+                            Let&apos;s discuss
+                          </option>
+                        </select>
+                      </div>
+                    </div>
+
+                    {/* Current Tech Stack (Optional) */}
+                    <div>
+                      <label className="sr-only" htmlFor="techStack">
+                        Current Tech Stack
+                      </label>
+                      <input
+                        id="techStack"
+                        name="techStack"
+                        className="form-input w-full text-sm"
+                        type="text"
+                        placeholder="Current tech stack (optional)"
+                      />
+                    </div>
+
+                    {/* Project Description */}
                     <div>
                       <label className="sr-only" htmlFor="message">
-                        Message
+                        Project Description
                       </label>
                       <textarea
                         id="message"
+                        name="message"
                         className="form-textarea w-full resize-none text-sm"
-                        placeholder="Your message.."
-                        rows={3}
+                        placeholder="Tell us about your project..."
+                        rows={4}
                         required
-                        defaultValue={""}
                       />
                     </div>
+
+                    {/* Project Goals */}
                     <div>
-                      <label className="flex items-center">
-                        <input type="checkbox" className="form-checkbox" />
-                        <span className="ml-2 text-sm text-gray-500">
-                          I'd like to receive updates &amp; product news.
-                        </span>
+                      <label className="sr-only" htmlFor="goals">
+                        Project Goals/Requirements
                       </label>
+                      <textarea
+                        id="goals"
+                        name="goals"
+                        className="form-textarea w-full resize-none text-sm"
+                        placeholder="What are your main goals and requirements?"
+                        rows={3}
+                        required
+                      />
                     </div>
                   </div>
+
+                  {/* Status Messages */}
+                  {submitStatus === "success" && (
+                    <div className="rounded-lg border border-green-200 bg-green-50 p-4 dark:border-green-800 dark:bg-green-900/20">
+                      <p className="text-sm text-green-800 dark:text-green-200">
+                        Thank you! Your message has been sent successfully.
+                        We&apos;ll get back to you soon.
+                      </p>
+                    </div>
+                  )}
+
+                  {submitStatus === "error" && (
+                    <div className="rounded-lg border border-red-200 bg-red-50 p-4 dark:border-red-800 dark:bg-red-900/20">
+                      <p className="text-sm text-red-800 dark:text-red-200">
+                        {errorMessage}
+                      </p>
+                    </div>
+                  )}
+
                   <div>
-                    <button className="btn w-full bg-gray-900 text-gray-100 hover:bg-gray-800 dark:bg-gray-100 dark:text-gray-800 dark:hover:bg-white">
-                      Submit
+                    <button
+                      type="submit"
+                      disabled={isSubmitting}
+                      className="btn w-full bg-gray-900 text-gray-100 hover:bg-gray-800 disabled:cursor-not-allowed disabled:opacity-50 dark:bg-gray-100 dark:text-gray-800 dark:hover:bg-white"
+                    >
+                      {isSubmitting ? "Sending..." : "Send Message"}
                     </button>
                   </div>
                 </div>
               </form>
-            </div>
-          </div>
-          {/* Cards */}
-          <div className="mx-auto max-w-xs md:max-w-6xl">
-            <div className="grid gap-6 max-md:-mx-3 md:grid-cols-3 xl:mx-8 xl:gap-9">
-              {/* Card */}
-              <div className="flex flex-col rounded-lg bg-linear-to-tr from-white/70 to-white/50 p-5 dark:bg-linear-to-b dark:from-gray-700/50 dark:to-gray-700/40">
-                <div className="mb-3 grow">
-                  <div className="font-inter-tight mb-1 font-semibold text-gray-800 dark:text-gray-200">
-                    Email
-                  </div>
-                  <p className="text-sm text-gray-600 dark:text-gray-500">
-                    Email us your queries and we'll get back to you ASAP.
-                  </p>
-                </div>
-                <div className="flex items-center space-x-2.5">
-                  <svg
-                    className="shrink-0 fill-indigo-500/80"
-                    width={16}
-                    height={16}
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <path d="M8 0a8 8 0 1 0 3.2 15.335l.916-.4-.8-1.833-.916.4A6 6 0 1 1 14 8v1a1 1 0 1 1-2 0V8a4.033 4.033 0 1 0-1.286 2.92A2.987 2.987 0 0 0 16 9V8a8.009 8.009 0 0 0-8-8Zm0 10a2 2 0 1 1 0-4 2 2 0 0 1 0 4Z" />
-                  </svg>
-                  <div className="text-sm text-gray-800 dark:text-gray-200">
-                    hello@cruip.com
-                  </div>
-                </div>
-              </div>
-              {/* Card */}
-              <div className="flex flex-col rounded-lg bg-linear-to-tr from-white/70 to-white/50 p-5 dark:bg-linear-to-b dark:from-gray-700/50 dark:to-gray-700/40">
-                <div className="mb-3 grow">
-                  <div className="font-inter-tight mb-1 font-semibold text-gray-800 dark:text-gray-200">
-                    Phone
-                  </div>
-                  <p className="text-sm text-gray-600 dark:text-gray-500">
-                    Would you like to have a chat? Feel free to give us a call.
-                  </p>
-                </div>
-                <div className="flex items-center space-x-2.5">
-                  <svg
-                    className="shrink-0 fill-indigo-500/80"
-                    width={12}
-                    height={16}
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <path d="M10 0H2a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2ZM2 13V3h8v10H2Z" />
-                  </svg>
-                  <div className="text-sm text-gray-800 dark:text-gray-200">
-                    +447359510000
-                  </div>
-                </div>
-              </div>
-              {/* Card */}
-              <div className="flex flex-col rounded-lg bg-linear-to-tr from-white/70 to-white/50 p-5 dark:bg-linear-to-b dark:from-gray-700/50 dark:to-gray-700/40">
-                <div className="mb-3 grow">
-                  <div className="font-inter-tight mb-1 font-semibold text-gray-800 dark:text-gray-200">
-                    Address
-                  </div>
-                  <p className="text-sm text-gray-600 dark:text-gray-500">
-                    Prefer to visit? We're located in London, United Kingdom.
-                  </p>
-                </div>
-                <div className="flex items-center space-x-2.5">
-                  <svg
-                    className="shrink-0 fill-indigo-500/80"
-                    width={14}
-                    height={16}
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <path d="M5.591 15.069c.404.358.684.606.709.631.4.4 1 .4 1.4.1.05-.05 1.075-.975 2.1-1.9 1.025-.925 2.05-1.85 2.1-1.9 1.4-1.3 2.1-3.1 2.1-5 0-3.9-3.1-7-7-7S0 3.1 0 7c0 1.9.7 3.7 2.1 4.9 0 .075 2.293 2.107 3.491 3.169ZM7 13.7l-3.4-3C2.6 9.7 2 8.4 2 7c0-2.8 2.2-4.9 5-4.9s5 2.2 5 5c0 1.4-.6 2.6-1.6 3.6l-3.4 3ZM9 7a2 2 0 1 1-4 0 2 2 0 0 1 4 0Z" />
-                  </svg>
-                  <div className="text-sm text-gray-800 dark:text-gray-200">
-                    London, SW1Y 4AH, UK
-                  </div>
-                </div>
-              </div>
             </div>
           </div>
         </div>

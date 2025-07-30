@@ -1,6 +1,7 @@
 # AGENTS.md - Development Guidelines
 
 ## Build/Test/Lint Commands
+
 - `npm run dev` - Start development server with Turbopack
 - `npm run build` - Build production version
 - `npm run start` - Start production server
@@ -8,6 +9,7 @@
 - No test framework configured
 
 ## Code Style Guidelines
+
 - **Framework**: Next.js 15 with App Router, React 19, TypeScript
 - **Styling**: Tailwind CSS with custom theme variables
 - **Imports**: Use `@/` alias for root imports, group external imports first
@@ -23,6 +25,7 @@
 - **Formatting**: 2-space indentation, semicolons, double quotes for strings
 
 ## Project Structure
+
 - `app/` - Next.js App Router pages and layouts
 - `components/` - Reusable React components with ui/ subfolder
 - `public/` - Static assets and images
