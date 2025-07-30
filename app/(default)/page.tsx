@@ -219,7 +219,7 @@ export default function Home() {
                 Ready to build something great?
               </h2>
               <p className="mb-8 text-gray-600 dark:text-gray-400">
-                Let's discuss your project and find the perfect technology
+                Let&apos;s discuss your project and find the perfect technology
                 solution for your needs.
               </p>
               <Link

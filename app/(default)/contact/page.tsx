@@ -46,7 +46,7 @@ export default function Contact() {
         setSubmitStatus("error");
         setErrorMessage(errorData.error || "Failed to send message");
       }
-    } catch (error) {
+    } catch {
       setSubmitStatus("error");
       setErrorMessage("Network error. Please try again.");
     } finally {
@@ -255,7 +255,9 @@ export default function Contact() {
                           <option value="25k-50k">$25k - $50k</option>
                           <option value="50k-100k">$50k - $100k</option>
                           <option value="100k-plus">$100k+</option>
-                          <option value="lets-discuss">Let's discuss</option>
+                          <option value="lets-discuss">
+                            Let&apos;s discuss
+                          </option>
                         </select>
                       </div>
                     </div>
@@ -310,7 +312,7 @@ export default function Contact() {
                     <div className="rounded-lg border border-green-200 bg-green-50 p-4 dark:border-green-800 dark:bg-green-900/20">
                       <p className="text-sm text-green-800 dark:text-green-200">
                         Thank you! Your message has been sent successfully.
-                        We'll get back to you soon.
+                        We&apos;ll get back to you soon.
                       </p>
                     </div>
                   )}
