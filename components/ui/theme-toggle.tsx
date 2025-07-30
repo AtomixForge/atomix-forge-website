@@ -6,7 +6,7 @@ export default function ThemeToggle() {
   const { theme, setTheme } = useTheme();
 
   return (
-    <div className="flex-1 flex justify-end">
+    <>
       <input
         type="checkbox"
         name="light-switch"
@@ -33,6 +33,6 @@ export default function ThemeToggle() {
         </svg>
         <span className="sr-only">Switch to light / dark version</span>
       </label>
-    </div>
+    </>
   );
 }
