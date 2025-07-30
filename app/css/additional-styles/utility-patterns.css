@@ -17,22 +17,22 @@
 
 @media (width >= theme(--breakpoint-md)) {
   .h1 {
-      @apply text-6xl;
+    @apply text-6xl;
   }
 
   .h2 {
-      @apply text-5xl;
+    @apply text-5xl;
   }
 
   .h3 {
-      @apply text-4xl;
+    @apply text-4xl;
   }
 }
 
 /* Buttons */
 .btn,
 .btn-sm {
-  @apply text-sm font-medium inline-flex items-center justify-center border border-transparent rounded-lg shadow-lg shadow-black/25 tracking-normal transition relative isolate before:absolute before:-inset-px before:rounded-lg before:pointer-events-none before:-z-10 before:shadow-[0px_2px_0px_0px_--theme(--color-white/.25)_inset] dark:before:shadow-[0px_2px_0px_0px_--theme(--color-gray-950/.16)_inset];
+  @apply relative isolate inline-flex items-center justify-center rounded-lg border border-transparent text-sm font-medium tracking-normal shadow-lg shadow-black/25 transition before:pointer-events-none before:absolute before:-inset-px before:-z-10 before:rounded-lg before:shadow-[0px_2px_0px_0px_--theme(--color-white/.25)_inset] dark:before:shadow-[0px_2px_0px_0px_--theme(--color-gray-950/.16)_inset];
 }
 
 .btn {
@@ -57,14 +57,14 @@ input[type="search"]::-webkit-search-results-decoration {
 .form-select,
 .form-checkbox,
 .form-radio {
-  @apply bg-white/70 dark:bg-gray-900/50 border focus:ring-0 focus:ring-offset-0 border-transparent hover:bg-white/80 dark:hover:bg-gray-900/60 focus:bg-white dark:focus:bg-gray-900/80 focus:border-transparent shadow-sm shadow-black/5 rounded-lg;
+  @apply rounded-lg border border-transparent bg-white/70 shadow-sm shadow-black/5 hover:bg-white/80 focus:border-transparent focus:bg-white focus:ring-0 focus:ring-offset-0 dark:bg-gray-900/50 dark:hover:bg-gray-900/60 dark:focus:bg-gray-900/80;
 }
 
 .form-input,
 .form-textarea,
 .form-multiselect,
 .form-select {
-  @apply text-gray-600 dark:text-gray-300 text-sm px-4 py-2;
+  @apply px-4 py-2 text-sm text-gray-600 dark:text-gray-300;
 }
 
 .form-input,

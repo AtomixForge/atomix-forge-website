@@ -22,10 +22,10 @@ export default function Accordion({
   }, []);
 
   return (
-    <div className="bg-linear-to-tr from-white/70 to-white/50 dark:bg-linear-to-b dark:from-gray-700/50 dark:to-gray-700/40 rounded-lg shadow-sm shadow-black/5 py-1">
+    <div className="rounded-lg bg-linear-to-tr from-white/70 to-white/50 py-1 shadow-sm shadow-black/5 dark:bg-linear-to-b dark:from-gray-700/50 dark:to-gray-700/40">
       <h2>
         <button
-          className="flex items-center justify-between w-full text-left font-medium text-gray-800 dark:text-gray-200 px-4 py-2"
+          className="flex w-full items-center justify-between px-4 py-2 text-left font-medium text-gray-800 dark:text-gray-200"
           onClick={(e) => {
             e.preventDefault();
             setAccordionOpen(!accordionOpen);
@@ -34,7 +34,7 @@ export default function Accordion({
           aria-controls={`faqs-text-${id}`}
         >
           <span>{title}</span>
-          <span className="shrink-0 w-5 h-5 flex items-center justify-center bg-white dark:bg-gray-600 shadow-xs rounded-full ml-2">
+          <span className="ml-2 flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-white shadow-xs dark:bg-gray-600">
             <svg
               className="fill-gray-500 dark:fill-gray-400"
               width="10"
@@ -44,7 +44,7 @@ export default function Accordion({
               <path
                 opacity=".72"
                 d="m2 .586 3 3 3-3L9.414 2 5.707 5.707a1 1 0 0 1-1.414 0L.586 2 2 .586Z"
-                className={`transform origin-center transition duration-200 ease-out ${accordionOpen && "rotate-180!"}`}
+                className={`origin-center transform transition duration-200 ease-out ${accordionOpen && "rotate-180!"}`}
               />
             </svg>
           </span>
@@ -54,7 +54,7 @@ export default function Accordion({
         id={`faqs-text-${id}`}
         role="region"
         aria-labelledby={`faqs-title-${id}`}
-        className={`grid text-sm text-gray-600 dark:text-gray-500 overflow-hidden transition-all duration-300 ease-in-out ${accordionOpen ? "grid-rows-[1fr] opacity-100" : "grid-rows-[0fr] opacity-0"}`}
+        className={`grid overflow-hidden text-sm text-gray-600 transition-all duration-300 ease-in-out dark:text-gray-500 ${accordionOpen ? "grid-rows-[1fr] opacity-100" : "grid-rows-[0fr] opacity-0"}`}
       >
         <div className="overflow-hidden">
           <p className="px-4 pb-2">{children}</p>
