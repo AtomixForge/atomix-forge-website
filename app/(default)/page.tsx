@@ -14,7 +14,7 @@ export default function Home() {
         <div className="px-4 sm:px-6">
           <PageHeader
             className="mb-16"
-            title="Custom Web Applications Built Right"
+            title="Custom Applications Built Right"
             description="We partner with businesses to build tailored web applications using the best technology stack for your specific needs."
           >
             Los Angeles-founded <span className="mx-1 text-gray-300">·</span>{" "}
@@ -44,7 +44,7 @@ export default function Home() {
                   </div>
                 </div>
                 <h3 className="mb-2 text-lg font-semibold text-gray-900 dark:text-white">
-                  Custom Web Development
+                  Custom Development
                 </h3>
                 <p className="text-sm text-gray-600 dark:text-gray-400">
                   Full-stack applications built to your requirements
